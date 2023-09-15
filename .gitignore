@@ -1,6 +1,9 @@
 #db
 db.csv
 
+# VSCODE
+.vscode
+
 # General
 .DS_Store
 .AppleDouble
