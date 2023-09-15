@@ -49,7 +49,7 @@ def create_task():
     except TimeoutError:
         db_code = HTTPStatus.REQUEST_TIMEOUT
 
-    return {"answer": answer, "saved": db_code == HTTPStatus.CREATED}, db_code
+    return {"answer": answer, "saved": db_code == HTTPStatus.CREATED}, HTTPStatus.OK
 
 
 @app.route('/history')

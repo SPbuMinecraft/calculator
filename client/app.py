@@ -13,18 +13,28 @@ SERVER_ADDRESS = "http://" + \
     app.config["SERVER_HOSTNAME"] + ":" + str(app.config["SERVER_PORT"])
 
 
+class ServerException(Exception):
+    def __init__(self, message: str):
+        self.message = message
+
+
 @app.route("/", methods=('GET', 'POST'))
 def index():
     form = CalcForm()
-    answer = get_answer(form)
-    history = get_history()['calculations']
+    answer = error = None
+    try:
+        answer = get_answer(form)
+    except ServerException as e:
+        error = e.message
+    history = get_history()
 
     return render_template(
-        "mainPage.html",
+        "index.html",
         form=form,
         expressions=[
             f"{entry['question']} = {entry['answer']}" for entry in reversed(history)],
-        answer=answer
+        answer=answer,
+        error=error
     )
 
 
@@ -36,20 +46,21 @@ def get_answer(form: CalcForm):
                 SERVER_ADDRESS + "/calculate", json=json, timeout=3)
         except TimeoutError:
             return None
-        if response.status_code == HTTPStatus.CREATED:
+        if response.status_code == HTTPStatus.OK:
             return response.json()["answer"]
-    return None  # TODO: show errors in UI
+        raise ServerException(response.text)
+    return None
 
 
 def get_history():
     try:
         responce = requests.get(SERVER_ADDRESS + "/history", timeout=3)
     except TimeoutError:
-        return None
+        return []
     if responce.status_code != HTTPStatus.OK:
-        return None
+        return []
 
-    return responce.json()
+    return responce.json()['calculations']
 
 
 if __name__ == "__main__":
