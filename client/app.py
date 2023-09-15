@@ -17,7 +17,7 @@ SERVER_ADDRESS = "http://" + \
 def index():
     form = CalcForm()
     answer = get_answer(form)
-    history = get_history()
+    history = get_history()['calculations']
 
     return render_template(
         "mainPage.html",

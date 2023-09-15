@@ -59,11 +59,11 @@ sql_worker = SQLWorker()
 
 @app.route('/history', methods=['GET'])
 def get_tasks():
-    calculations = [[{
-        'formula': computation.expression,
+    calculations = [{
+        'question': computation.expression,
         'answer': computation.result.replace('\n', ''),
         'datetime': str(computation.created_at),
-    } for computation in sql_worker.get_lines()]]
+    } for computation in sql_worker.get_lines()]
     return jsonify({'calculations': calculations})
 
 
