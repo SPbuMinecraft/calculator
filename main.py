@@ -9,7 +9,7 @@ app.config["SECRET_KEY"] = "minecraft"
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = CalcForm()
-    return render_template("mainPage.html", form=form, expressions=['5 + 3 = 8', '5 - 3 = 2'], page=1, size=1, answer=25)
+    return render_template("index.html", form=form, expressions=['5 + 3 = 8', '5 - 3 = 2'],  answer=25)
 
 
 if __name__ == "__main__":  # Проверка прямого запуска.
