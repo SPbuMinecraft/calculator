@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 from http import HTTPStatus
-from flask import Flask, abort, request
+from flask import Flask, abort, request, Response
 if __name__ == "__main__":
     from interpreter import Interpreter
 else:
@@ -13,19 +13,30 @@ app.config.from_pyfile("../config.py")
 DB_ADDRESS = "http://" + app.config["DB_HOSTNAME"] + ":" + str(app.config["DB_PORT"])
 
 
+def error(code: int, message: str):
+    abort(Response(message, code))
+
+
 @app.route('/calculate', methods=['POST'])
 def create_task():
     if not request.json:
-        abort(HTTPStatus.BAD_REQUEST, message="No json provided")
+        error(HTTPStatus.BAD_REQUEST, message="No json provided")
 
     try:
         answer = Interpreter.evaluate(request.json['question'])
     except KeyError:
-        abort(HTTPStatus.BAD_REQUEST, message="Request must include a 'question'")
+        error(HTTPStatus.BAD_REQUEST, message="Request must include a 'question'")
     except SyntaxError:
-        abort(HTTPStatus.BAD_REQUEST, message="Syntax error")
-    except ValueError:
-        abort(HTTPStatus.BAD_REQUEST, message="Division by 0?")
+        error(HTTPStatus.BAD_REQUEST, message="Syntax error")
+    except ArithmeticError:
+        error(HTTPStatus.BAD_REQUEST, message="Division by 0?")
+    except IndexError:
+        error(HTTPStatus.BAD_REQUEST, message="Empty string is bAd")
+    except Exception as e:
+        error(HTTPStatus.BAD_REQUEST, message=str(e))
+    
+    if answer is None:
+        error(HTTPStatus.BAD_REQUEST, message="Cannot evaluate this")
 
     calculation = {
         'date': datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
@@ -46,9 +57,9 @@ def get_tasks():
     try:
         responce = requests.get(DB_ADDRESS + "/history", timeout=3)
     except TimeoutError:
-        abort(HTTPStatus.REQUEST_TIMEOUT)
+        error(HTTPStatus.REQUEST_TIMEOUT)
     if responce.status_code != HTTPStatus.OK:
-        abort(HTTPStatus.INTERNAL_SERVER_ERROR)
+        error(HTTPStatus.INTERNAL_SERVER_ERROR)
     return responce.json()
 
 
