@@ -54,9 +54,10 @@ def create_task():
             'answer' : str(answer)
         }
         res = requests.post('http://localhost:6000//add', json=calculation)
-        return answer, res.status_code
+        return str(answer), res.status_code
     else:
-        return -1, 404
+        return "-1", 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)

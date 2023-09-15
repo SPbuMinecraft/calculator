@@ -6,11 +6,6 @@ from flask import Flask, jsonify, abort, request
 from SQLWorker import SQLWorker
 
 
-class ErrorCode(Enum):
-    STATUS_SUCCESS = 201
-    STATUS_ERROR = 404
-
-
 app = Flask(__name__)
 
 # csv_worker = CSVWorker("db.csv")
