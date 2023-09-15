@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online calculator</title>
+    <!-- Подключение стилей Bootstrap -->
+    <link rel="stylesheet" href="../static/css/calculator.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="main-container">
+        <div class="top-content"></div>
+        <div class="label"> 
+            <h1 class="label-text">Calculator v1.0</h1>
+        </div>
+        <div class="container calculator">
+            <form method="post">
+            <div class="calculator-input-container row">
+                {{ form.expression(class="calculator-input", id="expression") }}
+                <!-- <input type="text" placeholder="type your expression here" class="calculator-input"> -->
+                {{ form.submit(class="button-30", id="submit") }}
+            </div>
+    </div>
+        </form">
+    
+    <div class="bottom" >
+    <p>
+        {% if answer != None %}
+        <div class="answer">Answer: {{answer}}</div>
+    {% endif %}
+    </p>
+    <p>
+        {% if error != None %}
+        <div style="color:red">{{error}}</div>
+        {% endif %}
+    </p>
+    <p>
+        <div class="history">History:</div>
+    </p>
+    {% for expr in expressions %}
+        <div>{{expr}}</div>
+    {% endfor %}
+    <br>
+
+    </div>
+    <!-- Подключение скриптов Bootstrap (необходимо для работы некоторых функций) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </div>
+</body>
+</html>

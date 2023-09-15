@@ -1,5 +1,6 @@
 #db
 db.csv
+*.db
 
 # VSCODE
 .vscode
