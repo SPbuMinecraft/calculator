@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta lang="ru">
+    <title>Online calculator</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/mainPage.css">
+</head>
+<body style="background-color: rgba(214, 235, 240, 0.365);">
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #5f626322">
+        <img src="/static/image/Emblem.jpg" width="100" height="100" class="d-inline-block align-top" alt="">
+        <font size="9">Calculator</font>
+    </nav>
+</header>
+<main role="main" class="content" style="position: relative">
+    <form method="post">
+        <div class="form_group">
+            <label for="expression">{{ form.expression.label }}</label><br>
+            {{ form.expression(class="form_control", id="expression") }}
+        </div><br>
+        <div class="form_group">
+            {{ form.submit(class="form_control", id="submit") }}
+        </div>
+    </form>
+    {% if answer != None %}
+        <br>
+        <div>Answer: {{answer}}</div>
+    {% endif %}
+    <br>
+    <h3>History</h3>
+    <br>
+    {% for expr in expressions %}
+        <div>{{expr}}</div>
+    {% endfor %}
+    <br>
+</main>
+</body>
+</html>
